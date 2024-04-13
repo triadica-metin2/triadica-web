@@ -1,0 +1,82 @@
+{
+  "name": "metin2-client-ui",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "metin2-client-ui/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/metin2-client-ui",
+        "index": "metin2-client-ui/src/index.html",
+        "browser": "metin2-client-ui/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "metin2-client-ui/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "metin2-client-ui/src/favicon.ico",
+          "metin2-client-ui/src/assets"
+        ],
+        "styles": ["metin2-client-ui/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "metin2-client-ui:build:production"
+        },
+        "development": {
+          "buildTarget": "metin2-client-ui:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "proxyConfig": "metin2-client-ui/proxy.conf.json"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "metin2-client-ui:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "metin2-client-ui/jest.config.ts"
+      }
+    }
+  }
+}
