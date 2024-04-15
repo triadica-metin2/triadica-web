@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  height: 100%;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .mobile-filter-button, .mobile-sidebar {
+    display: none;
+  }
+  .filter-container {
+    display: block;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .filter-container {
+    display: none;
+  }
+  .mobile-filter-button {
+    display: block;
+    margin: 10px; /* adjust as needed */
+  }
+}

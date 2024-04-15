@@ -1,0 +1,161 @@
+<p-sidebar
+  [(visible)]="visibleSidebar"
+  position="left"
+  [modal]="true"
+  [baseZIndex]="1000"
+  styleClass="mobile-sidebar"
+>
+  <div class="flex flex-column gap-3">
+    <ng-template [ngTemplateOutlet]="filters"></ng-template>
+  </div>
+</p-sidebar>
+
+<div class="grid grid-nogutter gap-3 w-full flex-nowrap">
+  @if (!isMobile) {
+  <div
+    class="col-fixed"
+    style="width: 250px; background-color: #f4f4f4; padding: 1rem"
+  >
+    <ng-template [ngTemplateOutlet]="filters"></ng-template>
+  </div>
+  }
+
+  <!-- Main Content Area -->
+  <p-table [value]="accounts" dataKey="id" class="w-full">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 5rem">
+          @if (isMobile) {
+          <p-button
+            icon="pi pi-filter"
+            (click)="visibleSidebar = true"
+          ></p-button>
+          }
+        </th>
+        <!-- For expand toggle -->
+        <th>ID</th>
+        <th>Login</th>
+        <th>Email</th>
+        <th>Ostatnie logowanie</th>
+        <th>Zablokowany</th>
+      </tr>
+    </ng-template>
+    <ng-template
+      pTemplate="body"
+      let-account
+      let-expanded="expanded"
+      let-rowIndex="rowIndex"
+    >
+      <tr>
+        <td>
+          <button
+            type="button"
+            pButton
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            [pRowToggler]="account"
+            class="p-button-text p-button-rounded p-button-plain"
+          ></button>
+        </td>
+        <td>{{ account.id }}</td>
+        <td>{{ account.login }}</td>
+        <td>{{ account.email }}</td>
+        <td>{{ account.lastLogin | date : 'medium' }}</td>
+        <td>{{ account.isBlocked ? 'Yes' : 'No' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-account>
+      <tr>
+        <td colspan="6">
+          <p-table [value]="account.characters" dataKey="id">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>ID</th>
+                <th>Nazwa postaci</th>
+                <th>Level</th>
+                <th>Ostatnio zalogowany</th>
+                <th>Mapa (index)</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-char>
+              <tr>
+                <td>{{ char.id }}</td>
+                <td>{{ char.name }}</td>
+                <td>{{ char.level }}</td>
+                <td>{{ char.lastPlay | date : 'medium' }}</td>
+                <td>{{ char.mapIndex }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6">Brak postaci.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<ng-template #filters>
+  <div class="flex flex-column gap-3">
+    <h5>Filtry wyszukiwania</h5>
+    <div class="field">
+      <label for="login">Login</label>
+      <input
+        id="login"
+        type="text"
+        pInputText
+        placeholder="Login"
+        class="w-full"
+      />
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="text"
+        pInputText
+        placeholder="Email"
+        class="w-full"
+      />
+    </div>
+    <div class="field">
+      <label for="character">Nazwa postaci</label>
+      <input
+        id="character"
+        type="text"
+        pInputText
+        placeholder="Nazwa postaci"
+        class="w-full"
+      />
+    </div>
+    <div class="field">
+      <label for="dateRange">Ostatnie logowanie</label>
+      <p-calendar
+        id="dateRange"
+        selectionMode="range"
+        inputId="range"
+        class="w-full"
+        [(ngModel)]="dateRange"
+        [readonlyInput]="true"
+        [showIcon]="true"
+      ></p-calendar>
+    </div>
+    <div class="field w-full">
+      <p-triStateCheckbox
+        id="blocked"
+        label="Zablokowany"
+        [(ngModel)]="blocked"
+      ></p-triStateCheckbox>
+    </div>
+    <div class="field">
+      <p-button
+        [style]="{ width: '100%' }"
+        label="Szukaj"
+        icon="pi pi-search"
+        class="block w-full"
+      ></p-button>
+    </div>
+  </div>
+</ng-template>
